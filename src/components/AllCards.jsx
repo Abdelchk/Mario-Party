@@ -33,7 +33,7 @@ export default function AllCards({ data, isHiding, onHide }) {
   }, [isHiding, onHide]);
 
   return (
-    <div ref={containerRef} className="card-container">
+    <div ref={containerRef} className="all-cards-container">
       {data.map((board) => (
         <div
           key={board.id}

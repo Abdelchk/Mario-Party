@@ -1,13 +1,15 @@
-import { useState } from 'react'
-import { useBoardStore } from './store/useStore'
-import CardDisplay from './components/CardDisplay'
-import AllCards from './components/AllCards'
-import ButtonAnimate from './components/ButtonAnimate'
-import Music from './components/Music'
-import './App.css'
-import gsap from 'gsap'
-import cardRevealSound from './assets/sounds/smb_pause.wav'
-import rouletteSound from './assets/sounds/item_box.mp3'
+import { useState } from 'react';
+import { useBoardStore } from './store/useStore';
+import CardDisplay from './components/CardDisplay';
+import AllCards from './components/AllCards';
+import ButtonAnimate from './components/ButtonAnimate';
+import Music from './components/Music';
+import FullPageParticles from './components/FullPageParticles';
+import './App.css';
+import gsap from 'gsap';
+import cardRevealSound from './assets/sounds/smb_pause.wav';
+import rouletteSound from './assets/sounds/item_box.mp3';
+import { Canvas } from '@react-three/fiber';
 
 function App() {
   const { data, selectedBoard, selectBoard } = useBoardStore();
@@ -16,6 +18,7 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showAllCards, setShowAllCards] = useState(false);
   const [isHidingAllCards, setIsHidingAllCards] = useState(false);
+  const [showParticles, setShowParticles] = useState(false);
   const audio = new Audio(cardRevealSound);
   const rouletteAudio = new Audio(rouletteSound);
 
@@ -56,6 +59,12 @@ function App() {
           setIsAnimating(false);
           setIsTransitioning(false);
 
+          setShowParticles(true);
+
+          setTimeout(() => {
+            setShowParticles(false);
+          }, 3000);
+
           gsap.fromTo(
             '.img',
             { opacity: 0, scale: 0.7 },
@@ -81,6 +90,22 @@ function App() {
 
   return (
     <div className={`${showAllCards ? 'overflow-hidden' : ''}`}>
+      {showParticles && (
+        <Canvas
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <FullPageParticles />
+        </Canvas>
+      )}
+
       <button
         style={{
           position: 'fixed',
